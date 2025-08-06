@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Get current branch
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+# Only log merges into main
+if [ "$current_branch" == "main" ]; then
+    echo "🔀 Merge into main completed on $(date)" >> .git/hooks/merge.log
+    echo "✅ Merge logged to .git/hooks/merge.log"
+fi
