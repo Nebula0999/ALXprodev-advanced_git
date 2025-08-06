@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Exit immediately if a command exits with a non-zero status
+set -e
+
+# Get a list of all directories (ignoring .git) at any depth
+DIRS=$(find . -type d -not -path "./.git*" -not -path ".")
+
+# Flag to track missing README
+missing_readme=false
+
+for dir in $DIRS; do
+    # Skip hidden directories (like .venv)
+    basename=$(basename "$dir")
+    if [[ "$basename" == .* ]]; then
+        continue
+    fi
+
+    if [ ! -f "$dir/README.md" ]; then
+        echo "❌ Missing README.md in directory: $dir"
+        missing_readme=true
+    fi
+done
+
+if [ "$missing_readme" = true ]; then
+    echo "🚫 Commit aborted: Every directory must have a README.md file."
+    exit 1
+else
+    echo "✅ All directories contain README.md"
+fi
